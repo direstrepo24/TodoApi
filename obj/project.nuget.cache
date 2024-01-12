@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xS+edzArCIkJG8/RU1HLsAy3OkuxAgWMG+FyW6LiwNiZIdXWL+kS83NfPUTLdl9H7DhcVJ9XxDRW0JxxoU0Vqg==",
+  "dgSpecHash": "ER3WOixDyoj2K5ZH+idXOOA7sxR9EocU+8YPdSurofJ74NGnTHPSWaVmKbb9Oel7P3olhXTEOluNARSHY6+8Hw==",
   "success": true,
   "projectFilePath": "/Users/didierrestrepo/development/NET/TodoApi/TodoApi.csproj",
   "expectedPackageFiles": [
@@ -40,7 +40,9 @@
     "/Users/didierrestrepo/.nuget/packages/opentelemetry.api/1.7.0/opentelemetry.api.1.7.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/opentelemetry.api.providerbuilderextensions/1.7.0/opentelemetry.api.providerbuilderextensions.1.7.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/opentelemetry.exporter.instana/1.0.3/opentelemetry.exporter.instana.1.0.3.nupkg.sha512",
+    "/Users/didierrestrepo/.nuget/packages/opentelemetry.exporter.opentelemetryprotocol/1.7.0/opentelemetry.exporter.opentelemetryprotocol.1.7.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/opentelemetry.extensions.hosting/1.7.0/opentelemetry.extensions.hosting.1.7.0.nupkg.sha512",
+    "/Users/didierrestrepo/.nuget/packages/opentelemetry.instrumentation.aspnetcore/1.7.0/opentelemetry.instrumentation.aspnetcore.1.7.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.0/runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

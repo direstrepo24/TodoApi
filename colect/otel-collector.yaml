@@ -39,6 +39,9 @@ data:
     exporters:
       otlphttp:
         endpoint: 'otlp-blue-saas.instana.io:4318' 
+        headers:
+          x-instana-key: m2VxAzQJRUWvpTYEqnltvA
+        
         tls:
           insecure: true 
 

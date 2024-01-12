@@ -12,10 +12,12 @@ spec:
     metadata:
       labels:
         app: todoapi
+      annotations:
+        instana.io/scoped: "true"
     spec:
       containers:
       - name: todoapi
-        image: direstrepobr/todoapi:1.17
+        image: direstrepobr/todoapi:1.19
         ports:
         - containerPort: 80
         env:
@@ -30,7 +32,7 @@ spec:
         - name: INSTANA_AGENT_HOST
           value: "instana-agent.instana-agent.svc.cluster.local"
         - name: TRACER_EXPORTER_OTLP_ENDPOINT
-          value: "http://opentelemetry-collector:4318"
+          value: "http://$(INSTANA_AGENT_HOST):4318"
         - name: INSTANA_AGENT_PORT
           value: "42699"
         - name: INSTANA_AGENT_KEY
@@ -38,20 +40,8 @@ spec:
             secretKeyRef:
               name: instana-agent-secret
               key: key
-
-        # livenessProbe:
-        #   httpGet: # Agent liveness is published on localhost:42699/status
-        #     path: /status
-        #     port: 80
-        #   initialDelaySeconds: 75
-        #   periodSeconds: 5
-        # resources:
-        #   requests:
-        #     memory: "256Mi"
-        #     cpu: "0.5"
-        #   limits:
-        #     memory: "512Mi"
-        #     cpu: "1.0"
+        - name: INSTANA_ENDPOINT_URL
+          value: "https://serverless-red-saas.instana.io" 
 
 
 

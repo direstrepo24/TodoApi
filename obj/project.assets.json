@@ -702,6 +702,24 @@
           }
         }
       },
+      "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.7.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "[3.22.5, 4.0.0)",
+          "Grpc.Net.Client": "[2.52.0, 3.0.0)",
+          "OpenTelemetry": "1.7.0"
+        },
+        "compile": {
+          "lib/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "OpenTelemetry.Extensions.Hosting/1.7.0": {
         "type": "package",
         "dependencies": {
@@ -719,6 +737,25 @@
             "related": ".xml"
           }
         }
+      },
+      "OpenTelemetry.Instrumentation.AspNetCore/1.7.0": {
+        "type": "package",
+        "dependencies": {
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "1.7.0"
+        },
+        "compile": {
+          "lib/net6.0/OpenTelemetry.Instrumentation.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/OpenTelemetry.Instrumentation.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
@@ -3607,6 +3644,28 @@
         "opentelemetry.exporter.instana.nuspec"
       ]
     },
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.7.0": {
+      "sha512": "ULGTxg4HdnJD+CIuiD15Uov4xVVqwpbNGFd075J3MT3lLM9XcwU4YRz7CCNmqIlehYaiZrGhUurXrI2LgZZL1Q==",
+      "type": "package",
+      "path": "opentelemetry.exporter.opentelemetryprotocol/1.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net462/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+        "lib/net462/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
+        "lib/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+        "lib/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
+        "lib/net8.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+        "lib/net8.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
+        "lib/netstandard2.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+        "lib/netstandard2.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
+        "lib/netstandard2.1/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+        "lib/netstandard2.1/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
+        "opentelemetry-icon-color.png",
+        "opentelemetry.exporter.opentelemetryprotocol.1.7.0.nupkg.sha512",
+        "opentelemetry.exporter.opentelemetryprotocol.nuspec"
+      ]
+    },
     "OpenTelemetry.Extensions.Hosting/1.7.0": {
       "sha512": "MbB7CWWqb7xHK0jTF9Gtvw/eLWdaKqzkE1XAwLe05xyskHuwJWAbZFax4nGLA71YkMWQNO5iPIBlirvYXOLMlg==",
       "type": "package",
@@ -3625,6 +3684,26 @@
         "opentelemetry-icon-color.png",
         "opentelemetry.extensions.hosting.1.7.0.nupkg.sha512",
         "opentelemetry.extensions.hosting.nuspec"
+      ]
+    },
+    "OpenTelemetry.Instrumentation.AspNetCore/1.7.0": {
+      "sha512": "K/mjCmuR9zgrL6fMC6sbnX/y6BOJJFI3hp42O+tz8nT/w6sxbfjrLcU+fVwfct3lsnohSKdPfrq6fSrxAF5ezw==",
+      "type": "package",
+      "path": "opentelemetry.instrumentation.aspnetcore/1.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
+        "lib/net6.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
+        "lib/net7.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
+        "lib/net7.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
+        "lib/net8.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
+        "lib/net8.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
+        "lib/netstandard2.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
+        "lib/netstandard2.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
+        "opentelemetry-icon-color.png",
+        "opentelemetry.instrumentation.aspnetcore.1.7.0.nupkg.sha512",
+        "opentelemetry.instrumentation.aspnetcore.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -7523,8 +7602,11 @@
     "net6.0": [
       "Instana.Tracing.Core.Rewriter.Alpine >= 1.263.3",
       "OpenTelemetry >= 1.7.0",
+      "OpenTelemetry.Api >= 1.7.0",
       "OpenTelemetry.Exporter.Instana >= 1.0.3",
+      "OpenTelemetry.Exporter.OpenTelemetryProtocol >= 1.7.0",
       "OpenTelemetry.Extensions.Hosting >= 1.7.0",
+      "OpenTelemetry.Instrumentation.AspNetCore >= 1.7.0",
       "Serilog.AspNetCore >= 3.4.0",
       "Serilog.Enrichers.Environment >= 2.1.3",
       "Serilog.Enrichers.Process >= 2.0.1",
@@ -7582,11 +7664,23 @@
             "target": "Package",
             "version": "[1.7.0, )"
           },
+          "OpenTelemetry.Api": {
+            "target": "Package",
+            "version": "[1.7.0, )"
+          },
           "OpenTelemetry.Exporter.Instana": {
             "target": "Package",
             "version": "[1.0.3, )"
           },
+          "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+            "target": "Package",
+            "version": "[1.7.0, )"
+          },
           "OpenTelemetry.Extensions.Hosting": {
+            "target": "Package",
+            "version": "[1.7.0, )"
+          },
+          "OpenTelemetry.Instrumentation.AspNetCore": {
             "target": "Package",
             "version": "[1.7.0, )"
           },

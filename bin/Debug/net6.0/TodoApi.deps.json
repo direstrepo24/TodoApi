@@ -10,8 +10,11 @@
         "dependencies": {
           "Instana.Tracing.Core.Rewriter.Alpine": "1.263.3",
           "OpenTelemetry": "1.7.0",
+          "OpenTelemetry.Api": "1.7.0",
           "OpenTelemetry.Exporter.Instana": "1.0.3",
+          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.7.0",
           "OpenTelemetry.Extensions.Hosting": "1.7.0",
+          "OpenTelemetry.Instrumentation.AspNetCore": "1.7.0",
           "Serilog.AspNetCore": "3.4.0",
           "Serilog.Enrichers.Environment": "2.1.3",
           "Serilog.Enrichers.Process": "2.0.1",
@@ -491,6 +494,19 @@
           }
         }
       },
+      "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.7.0": {
+        "dependencies": {
+          "Google.Protobuf": "3.23.4",
+          "Grpc.Net.Client": "2.55.0",
+          "OpenTelemetry": "1.7.0"
+        },
+        "runtime": {
+          "lib/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.7.0.1106"
+          }
+        }
+      },
       "OpenTelemetry.Extensions.Hosting/1.7.0": {
         "dependencies": {
           "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
@@ -501,6 +517,17 @@
           "lib/net6.0/OpenTelemetry.Extensions.Hosting.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.7.0.1106"
+          }
+        }
+      },
+      "OpenTelemetry.Instrumentation.AspNetCore/1.7.0": {
+        "dependencies": {
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "1.7.0"
+        },
+        "runtime": {
+          "lib/net6.0/OpenTelemetry.Instrumentation.AspNetCore.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.7.0.1114"
           }
         }
       },
@@ -1674,12 +1701,26 @@
       "path": "opentelemetry.exporter.instana/1.0.3",
       "hashPath": "opentelemetry.exporter.instana.1.0.3.nupkg.sha512"
     },
+    "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ULGTxg4HdnJD+CIuiD15Uov4xVVqwpbNGFd075J3MT3lLM9XcwU4YRz7CCNmqIlehYaiZrGhUurXrI2LgZZL1Q==",
+      "path": "opentelemetry.exporter.opentelemetryprotocol/1.7.0",
+      "hashPath": "opentelemetry.exporter.opentelemetryprotocol.1.7.0.nupkg.sha512"
+    },
     "OpenTelemetry.Extensions.Hosting/1.7.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-MbB7CWWqb7xHK0jTF9Gtvw/eLWdaKqzkE1XAwLe05xyskHuwJWAbZFax4nGLA71YkMWQNO5iPIBlirvYXOLMlg==",
       "path": "opentelemetry.extensions.hosting/1.7.0",
       "hashPath": "opentelemetry.extensions.hosting.1.7.0.nupkg.sha512"
+    },
+    "OpenTelemetry.Instrumentation.AspNetCore/1.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-K/mjCmuR9zgrL6fMC6sbnX/y6BOJJFI3hp42O+tz8nT/w6sxbfjrLcU+fVwfct3lsnohSKdPfrq6fSrxAF5ezw==",
+      "path": "opentelemetry.instrumentation.aspnetcore/1.7.0",
+      "hashPath": "opentelemetry.instrumentation.aspnetcore.1.7.0.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",

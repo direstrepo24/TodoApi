@@ -24,47 +24,28 @@ builder.Services.AddSwaggerGen();
 var serviceName = "Instana.OpenTelemetryTestApp.TestService";
 var serviceVersion = "1.0.0";
 
-using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+Sdk.CreateTracerProviderBuilder()
     .AddSource(serviceName)
-
     .SetResourceBuilder(
         ResourceBuilder.CreateDefault()
-            .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
-    //.AddSqlClientInstrumentation()
-    //.AddConsoleExporter()
-    .AddInstanaExporter()
-    
+            .AddService(serviceName, serviceVersion))
+    .AddAspNetCoreInstrumentation()
+    .AddOtlpExporter(options =>
+    {
+        options.Endpoint = new Uri("http://opentelemetry-collector:4318");
+    })
     .Build();
-// Add services to the container.
-
-
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.OpenTelemetry(options =>
-    {
-        // Configuración para el exportador HTTP
-        options.Endpoint = "https://opentelemetry-collector:4318"; // Asume que el Collector está escuchando en el puerto 4318 para HTTP
-        options.Protocol = OtlpProtocol.HttpProtobuf;
-    })
-    /*  .WriteTo.OpenTelemetry(options =>
-    {
-        // Configuración para el exportador gRPC
-        options.Endpoint = "https://opentelemetry-collector:4317"; // Asume que el Collector está escuchando en el puerto 4317 para gRPC
-        options.Protocol = OtlpProtocol.Grpc;
-    })  */
     .CreateLogger();
+
+//var app = builder.Build();
 	Log.Information("Log de prueba enviado a OpenTelemetry Collector");
 	Log.Warning("Log de prueba enviado a OpenTelemetry Collector");
   
-//init logger
-
-			
-
-   
-
 ///loger probe
 ///
 /*
