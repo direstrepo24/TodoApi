@@ -41,7 +41,7 @@ spec:
               name: instana-agent-secret
               key: key
         - name: INSTANA_ENDPOINT_URL
-          value: "https://serverless-red-saas.instana.io" 
+          value: "https://ingress-coral-saas.instana.io:443" 
 
 
 

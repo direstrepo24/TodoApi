@@ -24,6 +24,12 @@ builder.Services.AddSwaggerGen();
 var serviceName = "Instana.OpenTelemetryTestApp.TestService";
 var serviceVersion = "1.0.0";
 
+// Read environment variables
+var instanaEndpointUrl = Environment.GetEnvironmentVariable("INSTANA_ENDPOINT_URL") ?? "https://serverless-coral-saas.instana.io:4318";
+var instanaAgentKey = Environment.GetEnvironmentVariable("INSTANA_AGENT_KEY") ?? "m2VxAzQJRUWvpTYEqnltvA";
+
+
+
 Sdk.CreateTracerProviderBuilder()
     .AddSource(serviceName)
     .SetResourceBuilder(
@@ -32,7 +38,14 @@ Sdk.CreateTracerProviderBuilder()
     .AddAspNetCoreInstrumentation()
     .AddOtlpExporter(options =>
     {
-        options.Endpoint = new Uri("http://opentelemetry-collector:4318");
+       // options.Endpoint = new Uri("http://opentelemetry-collector:4318");
+		options.Endpoint = new Uri(instanaEndpointUrl);
+
+        // Assuming your exporter supports setting headers
+        if (!string.IsNullOrEmpty(instanaAgentKey))
+        {
+            options.Headers = $"x-instana-key={instanaAgentKey}";
+        }
     })
     .Build();
 
