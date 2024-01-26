@@ -30,24 +30,15 @@ var instanaAgentKey = Environment.GetEnvironmentVariable("INSTANA_AGENT_KEY") ??
 
 
 
-Sdk.CreateTracerProviderBuilder()
-    .AddSource(serviceName)
-    .SetResourceBuilder(
-        ResourceBuilder.CreateDefault()
-            .AddService(serviceName, serviceVersion))
-    .AddAspNetCoreInstrumentation()
-    .AddOtlpExporter(options =>
-    {
-       // options.Endpoint = new Uri("http://opentelemetry-collector:4318");
-		options.Endpoint = new Uri(instanaEndpointUrl);
-
-        // Assuming your exporter supports setting headers
-        if (!string.IsNullOrEmpty(instanaAgentKey))
-        {
-            options.Headers = $"x-instana-key={instanaAgentKey}";
-        }
-    })
-    .Build();
+ using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
+                serviceName: "DemoApp",
+                serviceVersion: "1.0.0"))
+            .AddSource("OpenTelemetry.Demo.Jaeger")
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddOtlpExporter()
+            .Build();
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)

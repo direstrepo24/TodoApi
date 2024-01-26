@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[1.7.0, )"
             },
+            "OpenTelemetry.Exporter.Console": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
             "OpenTelemetry.Exporter.Instana": {
               "target": "Package",
               "version": "[1.0.3, )"
@@ -64,6 +68,10 @@
               "version": "[1.7.0, )"
             },
             "OpenTelemetry.Instrumentation.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
+            "OpenTelemetry.Instrumentation.Http": {
               "target": "Package",
               "version": "[1.7.0, )"
             },
