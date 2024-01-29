@@ -1,4 +1,8 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace TodoApi.Controllers;
 
@@ -12,6 +16,7 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+     private static readonly ActivitySource MyActivitySource = new("OpenTelemetry.TodoApiAppDemo.Jaeger");
 
     public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
@@ -21,6 +26,19 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+ using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
+                serviceName: "TodoApiAppDemo",
+                serviceVersion: "1.0.0"))
+            .AddSource("OpenTelemetry.TodoApiAppDemo.Jaeger")
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddOtlpExporter()
+            .Build();
+
+            callActivity().GetAwaiter().GetResult();
+     
+
              _logger.LogWarning("Seri Log is Working");
           // Ejemplo de información sensible (número de tarjeta de crédito)
             var creditCardNumber = "1234-5678-9012-3456";
@@ -41,7 +59,28 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray(); 
+
         
+        
+    }
+
+    private async Task callActivity(){
+
+               using var parent = MyActivitySource.StartActivity("JaegerDemo");
+
+        using (var client = new HttpClient())
+        {
+            using (var slow = MyActivitySource.StartActivity("SomethingSlow"))
+            {
+                await client.GetStringAsync("https://httpstat.us/200?sleep=1000");
+                await client.GetStringAsync("https://httpstat.us/200?sleep=1000");
+            }
+
+            using (var fast = MyActivitySource.StartActivity("SomethingFast"))
+            {
+               await  client.GetStringAsync("https://httpstat.us/301");
+            }
+        }
     }
      private string MaskCreditCard(string creditCardNumber)
         {

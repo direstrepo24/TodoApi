@@ -6,6 +6,9 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Exporter.Instana;
 
 using Serilog.Sinks.OpenTelemetry;
+using OpenTelemetry.Metrics;
+using System.Diagnostics.Metrics;
+using System.Diagnostics;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,35 +24,56 @@ builder.Services.AddSwaggerGen();
 //builder.Logging.ClearProviders();
 //builder.Logging.AddConsole();
 //builder.Logging.SetMinimumLevel(LogLevel.Debug); // Puedes ajustar el nivel de log según sea necesario
-var serviceName = "Instana.OpenTelemetryTestApp.TestService";
-var serviceVersion = "1.0.0";
-
-// Read environment variables
-var instanaEndpointUrl = Environment.GetEnvironmentVariable("INSTANA_ENDPOINT_URL") ?? "https://serverless-coral-saas.instana.io:4318";
-var instanaAgentKey = Environment.GetEnvironmentVariable("INSTANA_AGENT_KEY") ?? "m2VxAzQJRUWvpTYEqnltvA";
 
 
+// // Read environment variables
+// var instanaEndpointUrl = Environment.GetEnvironmentVariable("INSTANA_ENDPOINT_URL") ?? "https://serverless-coral-saas.instana.io:4318";
+// var instanaAgentKey = Environment.GetEnvironmentVariable("INSTANA_AGENT_KEY") ?? "m2VxAzQJRUWvpTYEqnltvA";
 
- using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
-                serviceName: "DemoApp",
-                serviceVersion: "1.0.0"))
-            .AddSource("OpenTelemetry.Demo.Jaeger")
-            .AddHttpClientInstrumentation()
-            .AddConsoleExporter()
-            .AddOtlpExporter()
-            .Build();
+// Custom metrics for the application
+var greeterMeter = new Meter("OtPrGrYa.Example", "1.0.0");
+var countGreetings = greeterMeter.CreateCounter<int>("greetings.count", description: "Counts the number of greetings");
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
+// Custom ActivitySource for the application
+var greeterActivitySource = new ActivitySource("OtPrGrJa.Example");
 
-//var app = builder.Build();
-	Log.Information("Log de prueba enviado a OpenTelemetry Collector");
-	Log.Warning("Log de prueba enviado a OpenTelemetry Collector");
-  
+var tracingOtlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+var otel = builder.Services.AddOpenTelemetry();
+
+// Configure OpenTelemetry Resources with the application name
+otel.ConfigureResource(resource => resource
+    .AddService(serviceName: builder.Environment.ApplicationName));
+
+// Add Metrics for ASP.NET Core and our custom metrics and export to Prometheus
+otel.WithMetrics(metrics => metrics
+    // Metrics provider from OpenTelemetry
+    .AddAspNetCoreInstrumentation()
+    .AddMeter(greeterMeter.Name)
+    // Metrics provides by ASP.NET Core in .NET 8
+    .AddMeter("Microsoft.AspNetCore.Hosting")
+    .AddMeter("Microsoft.AspNetCore.Server.Kestrel"));
+	
+    //.AddPrometheusExporter());
+
+// Add Tracing for ASP.NET Core and our custom ActivitySource and export to Jaeger
+otel.WithTracing(tracing =>
+{
+    tracing.AddAspNetCoreInstrumentation();
+    tracing.AddHttpClientInstrumentation();
+    tracing.AddSource(greeterActivitySource.Name);
+    if (tracingOtlpEndpoint != null)
+    {
+        tracing.AddOtlpExporter(otlpOptions =>
+         {
+             otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
+         });
+    }
+    else
+    {
+        tracing.AddConsoleExporter();
+    }
+});
+
 ///loger probe
 ///
 /*
