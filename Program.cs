@@ -9,6 +9,7 @@ using Serilog.Sinks.OpenTelemetry;
 using OpenTelemetry.Metrics;
 using System.Diagnostics.Metrics;
 using System.Diagnostics;
+using OpenTelemetry.Logs;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,112 +20,77 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//logs normales
-// Configurar el logging
-//builder.Logging.ClearProviders();
-//builder.Logging.AddConsole();
-//builder.Logging.SetMinimumLevel(LogLevel.Debug); // Puedes ajustar el nivel de log según sea necesario
 
 
-// // Read environment variables
-// var instanaEndpointUrl = Environment.GetEnvironmentVariable("INSTANA_ENDPOINT_URL") ?? "https://serverless-coral-saas.instana.io:4318";
-// var instanaAgentKey = Environment.GetEnvironmentVariable("INSTANA_AGENT_KEY") ?? "m2VxAzQJRUWvpTYEqnltvA";
+var serviceName = "TodoApiAppDemoInit";
+var serviceVersion = "1.0.0";
+using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+    .AddSource(serviceName)
 
-// Custom metrics for the application
-var greeterMeter = new Meter("OtPrGrYa.Example", "1.0.0");
-var countGreetings = greeterMeter.CreateCounter<int>("greetings.count", description: "Counts the number of greetings");
+    .SetResourceBuilder(
+        ResourceBuilder.CreateDefault()
+            .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddOtlpExporter()
+    		.AddInstanaExporter()
 
-// Custom ActivitySource for the application
-var greeterActivitySource = new ActivitySource("OtPrGrJa.Example");
+    .Build();
+// Add services to the container.
 
-var tracingOtlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-var otel = builder.Services.AddOpenTelemetry();
 
-// Configure OpenTelemetry Resources with the application name
-otel.ConfigureResource(resource => resource
-    .AddService(serviceName: builder.Environment.ApplicationName));
+const string outputTemplate =
+    "[{Level:w}]: {Timestamp:dd-MM-yyyy:HH:mm:ss} {MachineName} {EnvironmentName} {SourceContext} {Message}{NewLine}{Exception}";
 
-// Add Metrics for ASP.NET Core and our custom metrics and export to Prometheus
-otel.WithMetrics(metrics => metrics
-    // Metrics provider from OpenTelemetry
-    .AddAspNetCoreInstrumentation()
-    .AddMeter(greeterMeter.Name)
-    // Metrics provides by ASP.NET Core in .NET 8
-    .AddMeter("Microsoft.AspNetCore.Hosting")
-    .AddMeter("Microsoft.AspNetCore.Server.Kestrel"));
-	
-    //.AddPrometheusExporter());
 
-// Add Tracing for ASP.NET Core and our custom ActivitySource and export to Jaeger
-otel.WithTracing(tracing =>
-{
-    tracing.AddAspNetCoreInstrumentation();
-    tracing.AddHttpClientInstrumentation();
-    tracing.AddSource(greeterActivitySource.Name);
-    if (tracingOtlpEndpoint != null)
+var tracingOtlpEndpoint = builder.Configuration.GetValue<string>("OTEL_EXPORTER_OTLP_ENDPOINT")
+                           ?? Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT")
+                           ?? "http://collector.default.svc:4317";
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+	.MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .Enrich.WithThreadId()
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithMachineName()
+    .WriteTo.Console(outputTemplate: outputTemplate)
+    .WriteTo.OpenTelemetry(options =>
     {
-        tracing.AddOtlpExporter(otlpOptions =>
-         {
-             otlpOptions.Endpoint = new Uri(tracingOtlpEndpoint);
-         });
-    }
-    else
+        if (Uri.TryCreate(tracingOtlpEndpoint, UriKind.Absolute, out var uri))
+        {
+            options.Endpoint = uri.ToString();
+            options.Protocol = OtlpProtocol.Grpc;
+        }
+        else
+        {
+            Console.WriteLine($"ADVERTENCIA: El valor de OTEL_EXPORTER_OTLP_ENDPOINT no es una URI válida. Usando el valor predeterminado.");
+        }
+		 options.ResourceAttributes = new Dictionary<string, object>
+        {
+            ["app"] = "webapi",
+            ["runtime"] = "dotnet",
+            ["service.name"] = "TodoWebApi"
+        };
+    })
+    .CreateLogger();
+
+
+
+
+    /*  .WriteTo.OpenTelemetry(options =>
     {
-        tracing.AddConsoleExporter();
-    }
-});
-
-///loger probe
-///
-/*
-	var logger = new LoggerConfiguration()
-				.Enrich.WithSensitiveDataMasking(MaskingMode.InArea, new IMaskingOperator[]
-                {
-                    new EmailAddressMaskingOperator(),
-					new IbanMaskingOperator(),
-					new CreditCardMaskingOperator(false)
-				})
-				.WriteTo.Console()
-				.CreateLogger();
-
-			logger.Warning("Hello, world");
-
-			using (logger.EnterSensitiveArea())
-			{
-				// An e-mail address in text
-				logger.Warning("This is a secret email address: james.bond@universal-exports.co.uk");
-
-				// Works for properties too
-				logger.Warning("This is a secret email address: {Email}", "james.bond@universal-exports.co.uk");
-
-				// IBANs are also masked
-				logger.Warning("Bank transfer from Felix Leiter on NL02ABNA0123456789");
-
-				// IBANs are also masked
-				logger.Warning("Bank transfer from Felix Leiter on {BankAccount}", "NL02ABNA0123456789");
-
-				// Credit card numbers too
-				logger.Warning("Credit Card Number: 4111111111111111");
-
-				// even works in an embedded XML string
-				var x = new
-				{
-					Key = 12345, XmlValue = "<MyElement><CreditCard>4111111111111111</CreditCard></MyElement>"
-				};
-				logger.Warning("Object dump with embedded credit card: {x}", x);
-
-			}
-
-			// But outside the sensitive area nothing is masked
-			logger.Error("Felix can be reached at felix@cia.gov");
-
-
-			// Now, show that this works for async contexts too
-			logger.Error("Now, show the Async works");*/
- 
+        // Configuración para el exportador gRPC
+        options.Endpoint = "https://opentelemetry-collector:4317"; // Asume que el Collector está escuchando en el puerto 4317 para gRPC
+        options.Protocol = OtlpProtocol.Grpc;
+    })  */
+	Log.Information("Log de prueba enviado a OpenTelemetry Collector");
+	Log.Warning("Log de prueba enviado a OpenTelemetry Collector");
 
 builder.Host.UseSerilog();
-//builder.Logging.AddSerilog();
+
 
 var app = builder.Build();
 

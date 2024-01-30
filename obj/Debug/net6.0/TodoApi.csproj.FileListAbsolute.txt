@@ -85,3 +85,5 @@
 /Users/didierrestrepo/development/NET/TodoApi/bin/Debug/net6.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll
 /Users/didierrestrepo/development/NET/TodoApi/bin/Debug/net6.0/OpenTelemetry.Instrumentation.AspNetCore.dll
 /Users/didierrestrepo/development/NET/TodoApi/obj/Debug/net6.0/TodoApi.sourcelink.json
+/Users/didierrestrepo/development/NET/TodoApi/bin/Debug/net6.0/OpenTelemetry.Exporter.Console.dll
+/Users/didierrestrepo/development/NET/TodoApi/bin/Debug/net6.0/OpenTelemetry.Instrumentation.Http.dll

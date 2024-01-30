@@ -18,7 +18,7 @@ spec:
         app: webdemo
     spec:
       containers:
-      - image: direstrepobr/dotnetdemo:1.7
+      - image: direstrepobr/dotnetdemo:1.13
         name: dotnet
 
         env:
