@@ -64,6 +64,8 @@ public class WeatherForecastController : ControllerBase
         
     }
 
+
+
     private async Task callActivity(){
 
                using var parent = MyActivitySource.StartActivity("JaegerDemo");

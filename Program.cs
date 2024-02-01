@@ -1,3 +1,4 @@
+using System.Globalization;
 using Serilog;
 
 
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+/* 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
@@ -24,14 +25,49 @@ Log.Logger = new LoggerConfiguration()
 
 	
 
-builder.Host.UseSerilog();
+builder.Host.UseSerilog(); */
 
-Log.Information("Log de prueba enviado a OpenTelemetry Collector");
-Log.Warning("Log de prueba enviado a OpenTelemetry Collector");
 
 var app = builder.Build();
 
+var logger = app.Logger;
 
+int RollDice()
+{
+    return Random.Shared.Next(1, 7);
+}
+
+string HandleRollDice(string? player)
+{
+    var result = RollDice();
+
+    if (string.IsNullOrEmpty(player))
+    {
+        logger.LogInformation($"Anonymous player is rolling the dice: {result}", result.ToString());
+    }
+    else
+    {
+        logger.LogInformation("{player} is rolling the dice: {result}", player, result);
+    }
+
+
+    switch (result)
+    {
+        case < 3:
+            logger.LogError($"Lower value {result}");
+            break;
+        case < 4:
+            logger.LogCritical($"Medium value {result}");
+            break;
+        default:
+            logger.LogWarning($"High value {result}");
+            break;
+    }
+
+    return result.ToString(CultureInfo.InvariantCulture);
+}
+
+app.MapGet("/prueba/{player?}", HandleRollDice);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
