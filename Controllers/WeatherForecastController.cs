@@ -26,7 +26,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
- using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+ /* using var tracerProvider = Sdk.CreateTracerProviderBuilder()
             .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
                 serviceName: "TodoApiAppDemo",
                 serviceVersion: "1.0.0"))
@@ -34,9 +34,9 @@ public class WeatherForecastController : ControllerBase
             .AddHttpClientInstrumentation()
             .AddConsoleExporter()
             .AddOtlpExporter()
-            .Build();
+            .Build(); */
 
-            callActivity().GetAwaiter().GetResult();
+           // callActivity().GetAwaiter().GetResult();
      
 
              _logger.LogWarning("Seri Log is Working");

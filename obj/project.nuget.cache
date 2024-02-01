@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4Mb82S+5/ZdmLmaHfEMRPSP4fKWYDxNvb1QvgCJOgu9b6fQVSvG+AHJtGxDdDGgqZ6nAh0VjGrM2EaUZCci9kg==",
+  "dgSpecHash": "EzyV1I1JqPAwnS89xO+KP0GxPasfOvR5WVYRpfH5XoIO3RVvs7wGTJzsvTFeYF7UdxqeO5Btw/4CduvYDoJDDA==",
   "success": true,
   "projectFilePath": "/Users/didierrestrepo/development/NET/TodoApi/TodoApi.csproj",
   "expectedPackageFiles": [
@@ -109,9 +109,9 @@
     "/Users/didierrestrepo/.nuget/packages/system.threading.timer/4.0.1/system.threading.timer.4.0.1.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/system.xml.readerwriter/4.0.11/system.xml.readerwriter.4.0.11.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/system.xml.xdocument/4.0.11/system.xml.xdocument.4.0.11.nupkg.sha512",
-    "/Users/didierrestrepo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.22/microsoft.aspnetcore.app.ref.6.0.22.nupkg.sha512",
-    "/Users/didierrestrepo/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.22/microsoft.netcore.app.host.osx-arm64.6.0.22.nupkg.sha512",
-    "/Users/didierrestrepo/.nuget/packages/microsoft.netcore.app.ref/6.0.22/microsoft.netcore.app.ref.6.0.22.nupkg.sha512"
+    "/Users/didierrestrepo/.nuget/packages/microsoft.netcore.app.ref/6.0.26/microsoft.netcore.app.ref.6.0.26.nupkg.sha512",
+    "/Users/didierrestrepo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.26/microsoft.aspnetcore.app.ref.6.0.26.nupkg.sha512",
+    "/Users/didierrestrepo/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.26/microsoft.netcore.app.host.osx-arm64.6.0.26.nupkg.sha512"
   ],
   "logs": []
 }

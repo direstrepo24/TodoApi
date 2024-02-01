@@ -25,12 +25,6 @@ exporters:
     agent_key: Fr4u4GzWQEi6ubbyPRcw8g
     tls:
       insecure: true
-  instana_logs: # Agregamos un exportador para los logs
-    endpoint: https://serverless-coral-saas.instana.io
-    agent_key: Fr4u4GzWQEi6ubbyPRcw8g
-    tls:
-      insecure: true
-    log_level: warning # Puedes ajustar el nivel de log según tus necesidades
 
 service:
   pipelines:
@@ -46,4 +40,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch, resource]
-      exporters: [otlp, instana_logs] # Usamos el exportador instana_logs para enviar logs a Instana
+      exporters: [otlp, instana] # Usamos el exportador instana_logs para enviar logs a Instana

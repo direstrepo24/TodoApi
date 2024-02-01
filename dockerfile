@@ -1,4 +1,5 @@
 # Fase de compilación utilizando el SDK de .NET 6 Alpine
+# FROM mcr.microsoft.com/dotnet/sdk:6.0
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build-env
 WORKDIR /app
 
@@ -15,18 +16,29 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-# Configuración de Instana
-#ENV DOTNET_STARTUP_HOOKS="/app/Instana.Tracing.Core.dll"
-#ENV CORECLR_ENABLE_PROFILING="1"
-#ENV CORECLR_PROFILER="{cf0d821e-299b-5307-a3d8-b283c03916dd}"
-#ENV CORECLR_PROFILER_PATH="/app/instana_tracing/CoreProfiler.so"
-#ENV INSTANA_AGENT_HOST="instana-agent.instana-agent.svc.cluster.local"
-#ENV INSTANA_AGENT_PORT="42699"
+#Export de variables Opentelemetry
 
-# Ajustar si se usa OTLP para enviar datos
-# Por ejemplo, para OTLP over HTTP:
-#ENV TRACER_EXPORTER_OTLP_ENDPOINT="http://$(INSTANA_AGENT_HOST):4317"
+ENV OTEL_TRACES_EXPORTER=otlp \
+    OTEL_METRICS_EXPORTER=otlp \
+    OTEL_LOGS_EXPORTER=otlp \
+    OTEL_EXPORTER_OTLP_PROTOCOL=grpc \
+    OTEL_DOTNET_AUTO_TRACES_CONSOLE_EXPORTER_ENABLED=true \
+    OTEL_DOTNET_AUTO_METRICS_CONSOLE_EXPORTER_ENABLED=true \
+    OTEL_DOTNET_AUTO_LOGS_CONSOLE_EXPORTER_ENABLED=true
+
+#Setup de Otel instrumentacion automatica
+
+RUN apk update && apk add unzip && apk add curl && apk add bash
+RUN mkdir /otel
+RUN curl -L -o /otel/otel-dotnet-auto-install.sh https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh
+RUN chmod +x /otel/otel-dotnet-auto-install.sh
+ENV OTEL_DOTNET_AUTO_HOME=/otel
+RUN /bin/bash /otel/otel-dotnet-auto-install.sh
 
 
-ENTRYPOINT ["dotnet", "TodoApi.dll"]
+#Ejecucion de app utilizando script de instrumentacion automatica
+
+ENTRYPOINT ["/bin/bash", "-c", "source /otel/instrument.sh && dotnet TodoApi.dll"]
+
+#ENTRYPOINT ["dotnet", "TodoApi.dll"]
 
