@@ -13,9 +13,9 @@ metadata:
   name: instana-agent
   namespace: instana-agent
 spec:
-  clusterIP: 10.0.145.95
-  clusterIPs:
-  - 10.0.145.95
+  #clusterIP: 10.0.145.95
+  #clusterIPs:
+  #- 10.0.145.95
   internalTrafficPolicy: Local
   ipFamilies:
   - IPv4

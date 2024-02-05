@@ -1,5 +1,6 @@
 using System.Globalization;
 using Serilog;
+using Serilog.Events;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,9 +29,18 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog(); */
 
 
-var app = builder.Build();
+//var app = builder.Build();
+//logs normales
+//var logger = app.Logger;
 
-var logger = app.Logger;
+//logs con serilog
+// Configuración de Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.OpenTelemetry()
+    .CreateLogger();
+
+var logger = Log.Logger;
 
 int RollDice()
 {
@@ -43,29 +53,37 @@ string HandleRollDice(string? player)
 
     if (string.IsNullOrEmpty(player))
     {
-        logger.LogInformation($"Anonymous player is rolling the dice: {result}", result.ToString());
+        logger.Information($"Anonymous player is rolling the dice: {result}", result.ToString());
     }
     else
     {
-        logger.LogInformation("{player} is rolling the dice: {result}", player, result);
+        logger.Information("{player} is rolling the dice: {result}", player, result);
     }
 
 
     switch (result)
     {
         case < 3:
-            logger.LogError($"Lower value {result}");
+            logger.Error($"Lower value {result}");
             break;
         case < 4:
-            logger.LogCritical($"Medium value {result}");
+            logger.Fatal($"Medium value {result}");
             break;
         default:
-            logger.LogWarning($"High value {result}");
+            logger.Warning($"High value {result}");
             break;
     }
 
     return result.ToString(CultureInfo.InvariantCulture);
 }
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.ClearProviders();
+    loggingBuilder.AddSerilog();
+});
+
+var app = builder.Build();
 
 app.MapGet("/prueba/{player?}", HandleRollDice);
 // Configure the HTTP request pipeline.
