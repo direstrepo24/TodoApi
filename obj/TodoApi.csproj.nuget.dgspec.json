@@ -99,6 +99,10 @@
               "target": "Package",
               "version": "[3.1.0, )"
             },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Serilog.Settings.Configuration": {
               "target": "Package",
               "version": "[3.1.0, )"

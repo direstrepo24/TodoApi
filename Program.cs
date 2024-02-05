@@ -35,57 +35,54 @@ builder.Host.UseSerilog(); */
 
 //logs con serilog
 // Configuración de Serilog
+// Configuración de Serilog
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.OpenTelemetry()
     .CreateLogger();
 
-var logger = Log.Logger;
+builder.Logging.ClearProviders(); // Limpia los proveedores existentes
+builder.Logging.AddSerilog(); // Agrega Serilog como proveedor
+//builder.Host.UseSerilog();
+var app = builder.Build();
 
 int RollDice()
 {
     return Random.Shared.Next(1, 7);
 }
 
-string HandleRollDice(string? player)
+app.MapGet("/prueba/{player?}", async (HttpContext context, ILogger<Program> logger) =>
 {
+
     var result = RollDice();
 
-    if (string.IsNullOrEmpty(player))
+    if (!context.Request.RouteValues.TryGetValue("player", out var player))
+        player = null;
+
+    if (string.IsNullOrEmpty(player?.ToString()))
     {
-        logger.Information($"Anonymous player is rolling the dice: {result}", result.ToString());
+        logger.LogInformation($"Anonymous player is rolling the dice: {result}", result.ToString());
     }
     else
     {
-        logger.Information("{player} is rolling the dice: {result}", player, result);
+        logger.LogInformation("{player} is rolling the dice: {result}", player, result);
     }
-
 
     switch (result)
     {
         case < 3:
-            logger.Error($"Lower value {result}");
+            logger.LogError($"Lower value {result}");
             break;
         case < 4:
-            logger.Fatal($"Medium value {result}");
+            logger.LogCritical($"Medium value {result}");
             break;
         default:
-            logger.Warning($"High value {result}");
+            logger.LogWarning($"High value {result}");
             break;
     }
 
-    return result.ToString(CultureInfo.InvariantCulture);
-}
-
-builder.Services.AddLogging(loggingBuilder =>
-{
-    loggingBuilder.ClearProviders();
-    loggingBuilder.AddSerilog();
+    await context.Response.WriteAsync(result.ToString(CultureInfo.InvariantCulture));
 });
-
-var app = builder.Build();
-
-app.MapGet("/prueba/{player?}", HandleRollDice);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

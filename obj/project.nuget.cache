@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hvbZq9sES55GK1BzktagmIpx5dUMON6/7RQxrQ9+HALxJVzwRIWYLWctpcXzbDImTtg/R3LjfL42PLwJLOvnGg==",
+  "dgSpecHash": "jvMEjOkXz2/oSKfwFW5USnGnjRl/qrxL8sZ//grq6FZYQKvb/NbpgN879fBMP5hFWq8Twefsnqn+xaxN0fJ/Vw==",
   "success": true,
   "projectFilePath": "/Users/didierrestrepo/development/NET/TodoApi/TodoApi.csproj",
   "expectedPackageFiles": [
@@ -52,7 +52,7 @@
     "/Users/didierrestrepo/.nuget/packages/serilog.enrichers.sensitive/1.7.3/serilog.enrichers.sensitive.1.7.3.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/serilog.enrichers.thread/3.1.0/serilog.enrichers.thread.3.1.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/serilog.extensions.hosting/3.1.0/serilog.extensions.hosting.3.1.0.nupkg.sha512",
-    "/Users/didierrestrepo/.nuget/packages/serilog.extensions.logging/3.0.1/serilog.extensions.logging.3.0.1.nupkg.sha512",
+    "/Users/didierrestrepo/.nuget/packages/serilog.extensions.logging/8.0.0/serilog.extensions.logging.8.0.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/serilog.formatting.compact/1.1.0/serilog.formatting.compact.1.1.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/serilog.settings.configuration/3.1.0/serilog.settings.configuration.3.1.0.nupkg.sha512",
     "/Users/didierrestrepo/.nuget/packages/serilog.sinks.applicationinsights/3.1.0/serilog.sinks.applicationinsights.3.1.0.nupkg.sha512",

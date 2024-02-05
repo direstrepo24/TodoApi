@@ -23,6 +23,7 @@
           "Serilog.Enrichers.Process": "2.0.1",
           "Serilog.Enrichers.Sensitive": "1.7.3",
           "Serilog.Enrichers.Thread": "3.1.0",
+          "Serilog.Extensions.Logging": "8.0.0",
           "Serilog.Settings.Configuration": "3.1.0",
           "Serilog.Sinks.ApplicationInsights": "3.1.0",
           "Serilog.Sinks.Console": "5.0.1",
@@ -593,7 +594,7 @@
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Serilog": "3.1.1",
-          "Serilog.Extensions.Logging": "3.0.1"
+          "Serilog.Extensions.Logging": "8.0.0"
         },
         "runtime": {
           "lib/netstandard2.0/Serilog.Extensions.Hosting.dll": {
@@ -602,15 +603,15 @@
           }
         }
       },
-      "Serilog.Extensions.Logging/3.0.1": {
+      "Serilog.Extensions.Logging/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Logging": "8.0.0",
           "Serilog": "3.1.1"
         },
         "runtime": {
-          "lib/netstandard2.0/Serilog.Extensions.Logging.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "3.0.1.0"
+          "lib/net6.0/Serilog.Extensions.Logging.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "8.0.0.0"
           }
         }
       },
@@ -1459,12 +1460,12 @@
       "path": "serilog.extensions.hosting/3.1.0",
       "hashPath": "serilog.extensions.hosting.3.1.0.nupkg.sha512"
     },
-    "Serilog.Extensions.Logging/3.0.1": {
+    "Serilog.Extensions.Logging/8.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-U0xbGoZuxJRjE3C5vlCfrf9a4xHTmbrCXKmaA14cHAqiT1Qir0rkV7Xss9GpPJR3MRYH19DFUUqZ9hvWeJrzdQ==",
-      "path": "serilog.extensions.logging/3.0.1",
-      "hashPath": "serilog.extensions.logging.3.0.1.nupkg.sha512"
+      "sha512": "sha512-YEAMWu1UnWgf1c1KP85l1SgXGfiVo0Rz6x08pCiPOIBt2Qe18tcZLvdBUuV5o1QHvrs8FAry9wTIhgBRtjIlEg==",
+      "path": "serilog.extensions.logging/8.0.0",
+      "hashPath": "serilog.extensions.logging.8.0.0.nupkg.sha512"
     },
     "Serilog.Formatting.Compact/1.1.0": {
       "type": "package",

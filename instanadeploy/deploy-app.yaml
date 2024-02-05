@@ -29,7 +29,7 @@ spec:
           value: http://instana-agent.instana-agent.svc:4317
         - name: OTEL_SERVICE_NAME
           value: dotnetapi
-        image: direstrepobr/dotnetdemo:28
+        image: direstrepobr/dotnetdemo:30
         imagePullPolicy: IfNotPresent
         name: dotnetapi
         resources: {}
