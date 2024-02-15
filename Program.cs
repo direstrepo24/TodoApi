@@ -38,7 +38,7 @@ builder.Host.UseSerilog(); */
 // Configuración de Serilog
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.OpenTelemetry()
+  //  .WriteTo.OpenTelemetry()
     .CreateLogger();
 
 builder.Logging.ClearProviders(); // Limpia los proveedores existentes
