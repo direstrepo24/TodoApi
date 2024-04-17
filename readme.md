@@ -12,3 +12,29 @@ helm upgrade instana-agent \
   --set opentelemetry.grpc.enabled=true \
   --set opentelemetry.http.enabled=true \
    instana-agent
+
+
+   apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-mi-aplicacion-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/add-headers: |
+      Strict-Transport-Security "max-age=31536000; includeSubDomains"
+      X-Frame-Options "DENY"
+      X-Content-Type-Options "nosniff"
+      Content-Security-Policy "script-src 'self'; object-src 'self'"
+      X-XSS-Protection "1; mode=block"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mi-servicio-web
+            port:
+              number: 80
