@@ -45,33 +45,37 @@ Deprecación de apis y apps
 
 Proceso de Manejo de Deprecación de Aplicaciones Usando Versionamiento Semántico
 Objetivo
-Facilitar la deprecación ordenada de APIs, aplicaciones y artefactos tecnológicos en una compañía de financiamiento, basándose en el versionamiento semántico.
+Administrar la deprecación de aplicaciones, APIs y artefactos tecnológicos de manera segura y estratégica, evaluando y mitigando los riesgos operacionales y financieros asociados.
 Versionamiento Semántico
-Se utiliza el esquema de versionamiento MAJOR.MINOR.PATCH, donde:
-* MAJOR: Incremento por cambios que no son retrocompatibles.
-* MINOR: Incremento por nuevas funcionalidades compatibles.
-* PATCH: Incremento por correcciones de errores compatibles.
+Utilización del esquema MAJOR.MINOR.PATCH para versionar el software, identificando claramente las actualizaciones mayores que pueden implicar riesgos significativos.
 Proceso de Deprecación
 1. Inicio del Proceso
-    * Disparador: Líder Técnico identifica la necesidad de deprecación.
+    * Disparador: Líder Técnico detecta la necesidad de deprecación.
     * Roles involucrados: Líder Técnico
-    * Actividades: Convocar a una reunión inicial con Arquitectos y Equipo de Desarrollo para discutir la obsolescencia y planificación de la deprecación.
-2. Planificación de la Deprecación
-    * Roles involucrados: Arquitectos, Líder Técnico
-    * Actividades: Definir el alcance de la deprecación, seleccionar las versiones a deprecar y elaborar un cronograma detallado.
-    * Control: Aprobación del plan de deprecación por los Arquitectos y el Líder Técnico.
-3. Desarrollo e Implementación
+    * Actividades: Convocar a una reunión inicial con Arquitectos y el CoE de Ingeniería de Software para discutir la viabilidad técnica y la necesidad de deprecación.
+2. Evaluación de Riesgos
+    * Roles involucrados: Equipo de Riesgos
+    * Actividades: Análisis de los riesgos financieros y operacionales asociados con la deprecación propuesta, como impacto en clientes, pérdida de datos o interrupciones de servicio.
+    * Control: Informe de riesgos con recomendaciones para mitigar impactos negativos, validado por el Líder Técnico y los Arquitectos.
+3. Planificación de la Deprecación
+    * Roles involucrados: Arquitectos, Líder Técnico, CoE de Ingeniería de Software
+    * Actividades: Desarrollar un plan de deprecación que incluya las recomendaciones del equipo de riesgos.
+    * Control: Revisión del plan por parte del CoE para asegurar la alineación con las políticas de la empresa.
+4. Desarrollo e Implementación
     * Roles involucrados: Equipo de Desarrollo, DevOps
-    * Actividades: Implementar la deprecación en el código, actualizar la documentación y preparar el sistema para el retiro de las versiones afectadas.
-    * Control: Revisión de código y pruebas de regresión para validar los cambios.
-4. Comunicación de Deprecación
+    * Actividades: Implementación de los cambios técnicos necesarios y actualización de la documentación.
+    * Control: Pruebas de calidad y seguridad para garantizar la implementación efectiva sin interrupciones.
+5. Comunicación de Deprecación
     * Roles involucrados: Líder Técnico, Equipo de Marketing
-    * Actividades: Notificar a los usuarios sobre la deprecación planificada y proporcionar información sobre las versiones alternativas o actualizaciones necesarias.
-5. Transición y Soporte
+    * Actividades: Informar a usuarios internos y externos sobre la deprecación y las alternativas disponibles.
+    * Control: No es necesario un control específico por parte del CoE o equipo de riesgos aquí.
+6. Transición y Soporte
     * Roles involucrados: DevOps, Equipo de Soporte
-    * Actividades: Asistir a los usuarios en la transición a nuevas versiones y resolver incidencias relacionadas con la deprecación.
-6. Evaluación y Retiro Final
+    * Actividades: Facilitar la transición de los usuarios a nuevas versiones y resolver incidencias relacionadas con la deprecación.
+    * Control: Monitoreo continuo durante la transición para identificar y mitigar problemas emergentes.
+7. Evaluación y Retiro Final
     * Roles involucrados: Líder Técnico, Seguridad
-    * Actividades: Verificar que todas las instancias de la versión deprecada se han retirado y que los usuarios han migrado a versiones soportadas.
-    * Control: Confirmación del retiro completo y asegurar que no quedan resquicios de las versiones deprecadas.
+    * Actividades: Confirmación de la eliminación completa de las versiones deprecadas y evaluación de cualquier impacto residual.
+    * Control: Revisión final del proceso para documentar lecciones aprendidas y asegurar que no quedan riesgos sin mitigar.
+
 
