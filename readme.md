@@ -78,4 +78,43 @@ Proceso de Deprecación
     * Actividades: Confirmación de la eliminación completa de las versiones deprecadas y evaluación de cualquier impacto residual.
     * Control: Revisión final del proceso para documentar lecciones aprendidas y asegurar que no quedan riesgos sin mitigar.
 
+opcion 2 detallada:
+
+Fases del Proceso de Deprecación
+1. Análisis y Planificación Inicial
+    * Roles involucrados: Líder Técnico, CoE de Ingeniería de Software
+    * Actividades:
+        * Identificación de componentes a deprecar basado en análisis de obsolescencia y demanda.
+        * Evaluación inicial de impacto considerando tipo de software y usuarios afectados.
+    * Control: Documentación de la decisión de deprecación con justificaciones claras y aprobación del plan inicial.
+2. Evaluación de Riesgos
+    * Roles involucrados: Equipo de Riesgos
+    * Actividades:
+        * Evaluación de riesgos operacionales y financieros específicos para cada tipo de deprecación.
+        * Sugerencias de mitigación.
+    * Control: Revisión y aprobación del informe de riesgos con planes de acción específicos.
+3. Desarrollo de Plan de Deprecación Detallado
+    * Roles involucrados: Arquitectos, Líder Técnico, CoE de Ingeniería de Software, Equipo de Riesgos
+    * Actividades:
+        * Elaboración de cronogramas diferenciados para deprecación de APIs, aplicaciones y artefactos.
+        * Definición de estrategias de comunicación y soporte técnico post-deprecación.
+    * Control: Aprobación del plan detallado y revisión de su alineación con la estrategia tecnológica global.
+4. Implementación y Seguimiento
+    * Roles involucrados: Equipo de Desarrollo, DevOps
+    * Actividades:
+        * Implementación de la deprecación según lo planificado.
+        * Monitoreo del proceso para ajustar la estrategia según sea necesario.
+    * Control: Auditorías periódicas para asegurar cumplimiento y efectividad.
+5. Comunicación y Gestión del Cambio
+    * Roles involucrados: Líder Técnico, Equipo de Marketing, CoE de Ingeniería de Software
+    * Actividades:
+        * Comunicación clara y transparente a todas las partes interesadas internas y externas.
+        * Capacitaciones y soporte para transiciones suaves a nuevas versiones o alternativas.
+    * Control: Evaluación del impacto de las comunicaciones y ajustes basados en feedback.
+6. Cierre y Revisión Post-Deprecación
+    * Roles involucrados: Líder Técnico, Equipo de Riesgos, Seguridad
+    * Actividades:
+        * Confirmación de que todos los sistemas afectados están operando sin la versión deprecada.
+        * Análisis de incidentes para aprender de cada proceso de deprecación.
+    * Control: Revisión final y reporte de cierre, incluyendo lecciones aprendidas y recomendaciones para futuros procesos.
 
