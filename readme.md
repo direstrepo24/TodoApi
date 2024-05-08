@@ -48,6 +48,12 @@ Este ejemplo incluye configuraciones para las siguientes cabeceras de seguridad:
 - `Feature-Policy`: Controla el acceso a las funciones y APIs del navegador.
 - `Referrer-Policy`: Controla cómo se incluye la información del referente en las solicitudes HTTP.
 
+  con los valores asi:
+- X-Content-Type-Options: nosniff es el valor utilizado en esta cabecera. Cuando esta cabecera está presente con el valor nosniff, le indica al navegador que no intente adivinar o "snifear" el tipo de contenido basándose en el contenido real del archivo, lo que ayuda a prevenir ataques de tipo MIME-sniffing.
+- Set-Cookie: En esta cabecera, el valor name=value es el nombre y el valor de la cookie que se está estableciendo. Los atributos HttpOnly, Secure y SameSite=Strict indican que la cookie solo debe ser accesible a través de HTTP (no JavaScript), solo debe ser enviada sobre conexiones seguras (HTTPS) y solo debe ser enviada si el sitio web de origen coincide exactamente con el destino de la solicitud, respectivamente.
+- Feature-Policy: En este caso, se establece una política de características que restringe el acceso a ciertas funciones y APIs del navegador. Con "geolocation 'self'; microphone 'self'", se permite el uso de la geolocalización y el micrófono solo desde el propio sitio web ('self').
+- Referrer-Policy: El valor strict-origin en esta cabecera indica que solo se enviará el referente en las solicitudes si el protocolo de la solicitud es HTTPS y si el dominio de origen coincide exactamente con el destino de la solicitud.
+
 Recuerda ajustar los valores según las necesidades específicas de tu aplicación y las prácticas recomendadas de seguridad.
 
 ```yaml
