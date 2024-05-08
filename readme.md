@@ -40,6 +40,16 @@ spec:
               number: 80
 
 Para front:
+
+Este ejemplo incluye configuraciones para las siguientes cabeceras de seguridad:
+
+- `X-Content-Type-Options`: Evita que el navegador mime-snorfee (adivine) el tipo de contenido.
+- `Set-Cookie`: Establece cookies con los atributos `Secure`, `HttpOnly` y `SameSite=Strict`.
+- `Feature-Policy`: Controla el acceso a las funciones y APIs del navegador.
+- `Referrer-Policy`: Controla cómo se incluye la información del referente en las solicitudes HTTP.
+
+Recuerda ajustar los valores según las necesidades específicas de tu aplicación y las prácticas recomendadas de seguridad.
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -64,3 +74,7 @@ spec:
                 port:
                   number: 80
 ´´´
+
+Donde:
+
+
