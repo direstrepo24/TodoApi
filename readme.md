@@ -83,4 +83,47 @@ spec:
 
 Donde:
 
+erDiagram
+    Customer ||--o{ CallLog : "logs"
+    Customer ||--o{ Payment : "payments"
 
+    Customer {
+        string customerId "ID único"
+        string name "Nombre del cliente"
+        string address "Dirección"
+        string phoneNumber "Número de teléfono"
+        CallLog calls "Historial de llamadas (Documentos embebidos)"
+        Payment payments "Historial de pagos (Documentos embebidos)"
+        array tags "Etiquetas para segmentación"
+    }
+
+    CallLog {
+        dateTime date "Fecha y hora de la llamada"
+        string agentId "ID del agente"
+        string status "Estado de la llamada (Conectada/No Conectada/No Respondida)"
+        boolean repeatedCall "Indica si la llamada es repetida"
+        string notes "Notas sobre la llamada"
+        InteractionDetails interaction "Detalles sobre la interacción"
+        array followUps "Seguimientos (Documentos embebidos)"
+    }
+
+    InteractionDetails {
+        boolean wasAttended "Si fue atendido"
+        string result "Resultado de la llamada (Pago acordado, Promesa de pago, Sin acuerdo)"
+        dateTime nextCall "Fecha y hora para la próxima llamada"
+    }
+
+    FollowUp {
+        dateTime followUpDate "Fecha de seguimiento"
+        string type "Tipo de seguimiento (Correo electrónico, SMS, Otra llamada)"
+        string status "Estado del seguimiento"
+        string result "Resultado del seguimiento"
+    }
+
+    Payment {
+        dateTime paymentDate "Fecha de pago"
+        double amount "Monto pagado"
+        string paymentMethod "Método de pago (Tarjeta, Transferencia, Efectivo)"
+        string receiptNumber "Número de recibo"
+        boolean isConfirmed "Pago confirmado"
+    }
