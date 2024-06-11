@@ -41,6 +41,50 @@ spec:
     - myapp.example.com
     secretName: tls-secret
 ```
+```c#
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers();
+        services.AddRazorPages();  // Si usas Razor para el front-end
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
+        app.UseRouting();
+
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                // API specific security headers
+                context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; script-src 'self'; connect-src 'self';";
+                context.Response.Headers["X-Frame-Options"] = "DENY";
+                context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            }
+            else
+            {
+                // Frontend specific security headers
+                context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+                context.Response.Headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload";
+                context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+            }
+            await next();
+        });
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapRazorPages();  // Si usas Razor para el front-end
+        });
+    }
+}
+
+```
 
 -  Creación de un Job Básico
 
