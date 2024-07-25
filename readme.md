@@ -6,8 +6,19 @@ metadata:
   name: modular-monolith-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($uri ~* "^/api") {
+        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self';";
+        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "X-Content-Type-Options: nosniff";
+      }
+      if ($uri ~* "^/paty(/|$)(.*)") {
+        more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+        more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
+        more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      }
 spec:
   tls:
     - hosts:
@@ -24,25 +35,14 @@ spec:
                 name: monolith-service
                 port:
                   number: 80
-            metadata:
-              annotations:
-                nginx.ingress.kubernetes.io/configuration-snippet: |
-                  more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self';";
-                  more_set_headers "X-Frame-Options: DENY";
-                  more_set_headers "X-Content-Type-Options: nosniff";
-          - path: /(.*)
+          - path: /paty(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: monolith-service
                 port:
                   number: 80
-            metadata:
-              annotations:
-                nginx.ingress.kubernetes.io/configuration-snippet: |
-                  more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
-                  more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
-                  more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+
 ```
 
 ```yaml
