@@ -9,15 +9,22 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/configuration-snippet: |
+      # Encabezados de seguridad para el backend API
       if ($uri ~* "^/api") {
-        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src 'self';";
-        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'none'; connect-src 'self'; img-src 'none'; style-src 'none'; frame-ancestors 'none';";
         more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "Referrer-Policy: no-referrer";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
       }
+      # Encabezados de seguridad para el frontend
       if ($uri ~* "^/paty(/|$)(.*)") {
-        more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+        more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';";
         more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: SAMEORIGIN";
         more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
       }
 spec:
   tls:
@@ -42,6 +49,7 @@ spec:
                 name: monolith-service
                 port:
                   number: 80
+
 
 ```
 
