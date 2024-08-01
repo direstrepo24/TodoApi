@@ -1,43 +1,89 @@
-# Decisión de Arquitectura de Software: Adopción de REST Client para Visual Studio Code
+# Guia Serenity 
+```xml
+pom.xml
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-codec</artifactId>
+    <version>1.15</version>
+</dependency>
+<dependency>
+    <groupId>net.serenity-bdd</groupId>
+    <artifactId>serenity-core</artifactId>
+    <version>3.2.0</version>
+</dependency>
+<dependency>
+    <groupId>net.serenity-bdd</groupId>
+    <artifactId>serenity-junit</artifactId>
+    <version>3.2.0</version>
+</dependency>
+```
+EncryptionUtil:
 
-## Decisión a Tomar
-Adoptar la extensión "REST Client" para Visual Studio Code como herramienta principal para pruebas de APIs REST, reemplazando el uso de Postman y Thunder Client.
+```Java
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 
-## Contexto
-El equipo de desarrollo necesita una herramienta eficiente y segura para realizar pruebas de APIs. La autenticación obligatoria en las versiones recientes de Postman y Thunder Client presenta un riesgo de exposición de información sensible.
+public class EncryptionUtil {
 
-## Restricciones
-- **Seguridad**: La herramienta no debe requerir autenticación que exponga información sensible.
-- **Compatibilidad**: Debe ser compatible con la mayoría de los proyectos y tecnologías usadas actualmente por el equipo.
-- **Costo**: Preferible que sea una solución sin costo adicional.
+    private static final String ALGORITHM = "AES";
 
-## Alternativas
-1. **Postman**: Popular pero requiere autenticación en las últimas versiones.
-2. **Thunder Client**: Integración con VS Code, pero también requiere autenticación reciente.
-3. **REST Client**: Extensión de VS Code que no requiere autenticación para su uso.
+    public static SecretKey generateKey() throws Exception {
+        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+        keyGen.init(128); // AES-128
+        return keyGen.generateKey();
+    }
 
-## Decisión
-Adoptar "REST Client" debido a su integración directa con el entorno de desarrollo y su política de no requerir autenticación para operar.
+    public static String encrypt(String data, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encryptedData = cipher.doFinal(data.getBytes());
+        return Base64.encodeBase64String(encryptedData);
+    }
 
-## Excepciones
-En casos donde se requiera una colaboración extensiva y características avanzadas de documentación, se podría considerar el uso de Postman a pesar de sus restricciones.
+    public static String decrypt(String encryptedData, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decodedData = Base64.decodeBase64(encryptedData);
+        byte[] originalData = cipher.doFinal(decodedData);
+        return new String(originalData);
+    }
+}
+```
 
-## Implicaciones
-- **Capacitación**: Se requerirá una breve sesión de capacitación para los desarrolladores en el uso de "REST Client".
-- **Integración**: Integración directa en VS Code, facilitando el flujo de trabajo de desarrollo.
+```Java
+import net.serenitybdd.junit.runners.SerenityRunner;
+import net.thucydides.core.annotations.Step;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-## Análisis
+import javax.crypto.SecretKey;
 
-| Criterio         | Postman                              | Thunder Client                       | REST Client                          |
-|------------------|--------------------------------------|--------------------------------------|--------------------------------------|
-| Seguridad        | Bajo (Requiere autenticación)        | Bajo (Requiere autenticación)        | Alto (No requiere autenticación)     |
-| Compatibilidad   | Alta                                 | Alta                                 | Alta                                 |
-| Costo            | Medio                                | Bajo                                 | Bajo                                 |
-| Versionamiento   | Alta                                 | Media                                | Baja                                 |
-| Funcionalidades  | Gestión avanzada de colecciones, entornos, pruebas automatizadas, integración con API de terceros | Interfaz intuitiva, ejecución rápida de peticiones, gestión básica de entornos | Sintaxis de archivos de texto plano, no necesita GUI, ejecuciones directas desde el editor de código |
-| Integración      | Web, aplicaciones de escritorio      | Integración nativa con VS Code       | Integración nativa con VS Code       |
-| Licenciamiento   | Freemium, con opciones pagas para características avanzadas | Gratuito                             | Gratuito                             |
+@RunWith(SerenityRunner.class)
+public class SoapTest {
 
+    private static SecretKey secretKey;
 
-## Conclusiones
-La elección de "REST Client" como herramienta para pruebas de APIs en el entorno de desarrollo de Visual Studio Code se alinea con los requisitos de seguridad, costo y eficiencia del equipo. Esta herramienta proporciona una solución robusta y segura sin la necesidad de manejar autenticaciones que podrían comprometer la información sensible del equipo y la organización.
+    @BeforeClass
+    public static void setup() throws Exception {
+        secretKey = EncryptionUtil.generateKey();
+    }
+
+    @Step("Encrypt and send sensitive data")
+    public void sendEncryptedData(String data) throws Exception {
+        String encryptedData = EncryptionUtil.encrypt(data, secretKey);
+        // Aquí agregarías el código para enviar la solicitud SOAP con encryptedData
+        System.out.println("Encrypted Data: " + encryptedData);
+    }
+
+    @Test
+    public void testSendEncryptedIdentification() throws Exception {
+        String sensitiveData = "123456789"; // Ejemplo de número de identificación
+        sendEncryptedData(sensitiveData);
+    }
+}
+```
+
