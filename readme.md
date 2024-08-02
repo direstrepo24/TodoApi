@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/configuration-snippet: |
       # Aplica encabezados específicos para cada ruta que necesita ajuste fino
+      more_set_headers "Set-Cookie: $cookie_name=$cookie_value; Path=/; HttpOnly; Secure; SameSite=Strict";
       if ($request_uri ~* "^/paty/api/auth/user") {
         more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'none'; connect-src 'self'; img-src 'none'; style-src 'none'; frame-ancestors 'none';";
         more_set_headers "X-Content-Type-Options: nosniff";
