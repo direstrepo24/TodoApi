@@ -1,4 +1,71 @@
 ```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: modular-monolith-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      # Aplica encabezados específicos para cada ruta que necesita ajuste fino
+      if ($request_uri ~* "^/paty/api/auth/user") {
+        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'none'; connect-src 'self'; img-src 'none'; style-src 'none'; frame-ancestors 'none';";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "Referrer-Policy: no-referrer";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "Content-Type: application/json";
+      }
+      if ($request_uri ~* "^/paty/api/") {
+        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'none'; connect-src 'self'; img-src 'none'; style-src 'none'; frame-ancestors 'none';";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "Referrer-Policy: no-referrer";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "Content-Type: application/json";
+      }
+      if ($request_uri ~* "^/paty/") {
+        more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'self';";
+        more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: SAMEORIGIN";
+        more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+      }
+spec:
+  tls:
+    - hosts:
+        - "your-domain.com"
+      secretName: your-domain-tls
+  rules:
+    - host: "your-domain.com"
+      http:
+        paths:
+          - path: /paty/api/auth/user
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-service
+                port:
+                  number: 80
+          - path: /paty/api(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-service
+                port:
+                  number: 80
+          - path: /paty/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-service
+                port:
+                  number: 80
+```
+
+```yaml
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -53,6 +120,59 @@ spec:
 
 ```
 
+otra opcion:
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: modular-monolith-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      # Aplicar encabezados para múltiples rutas del backend con una sola condición
+      if ($request_uri ~* "^/paty/api(/auth/user|/other/route1|/other/route2)") {
+        more_set_headers "Content-Security-Policy: default-src 'none'; script-src 'none'; connect-src 'self'; img-src 'none'; style-src 'none'; frame-ancestors 'none';";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: DENY";
+        more_set_headers "Referrer-Policy: no-referrer";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+        more_set_headers "Content-Type: application/json";
+      }
+      if ($request_uri ~* "^/paty/") {
+        more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'self';";
+        more_set_headers "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload";
+        more_set_headers "X-Content-Type-Options: nosniff";
+        more_set_headers "X-Frame-Options: SAMEORIGIN";
+        more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+        more_set_headers "X-XSS-Protection: 1; mode=block";
+      }
+spec:
+  tls:
+    - hosts:
+        - "your-domain.com"
+      secretName: your-domain-tls
+  rules:
+    - host: "your-domain.com"
+      http:
+        paths:
+          - path: /paty/api(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-service
+                port:
+                  number: 80
+          - path: /paty/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-service
+                port:
+                  number: 80
+
+```
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
