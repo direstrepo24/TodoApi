@@ -1,3 +1,46 @@
+#migracion 3.1 a 6
+
+```c#
+namespace Tuya.CobranzaDigital.ClienteCastigado.API
+{
+    [ExcludeFromCodeCoverage]
+    public class Program
+    {
+        protected Program() { }
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureAppConfiguration((host, config) =>
+                    {
+                        var settings = config.Build();
+                        int durationCacheSeconds = settings.GetValue<int>("AppConfiguration:DurationCacheSeconds");
+                        string connectionString = settings.GetValue<string>("AppConfiguration:EndPoint");
+                        config.AddAzureAppConfiguration(options =>
+                        {    
+                            options.Connect(new Uri(connectionString), new DefaultAzureCredential());
+                            options
+                            .ConfigureRefresh(refresh =>
+                            {
+                                refresh.Register(key: "Settings:Sentinel", refreshAll: true)
+                                .SetCacheExpiration(TimeSpan.FromSeconds(durationCacheSeconds));
+                            });
+                        });
+                        if (host.HostingEnvironment.IsDevelopment())
+                        {
+                            config.AddUserSecrets<Program>();
+                        }
+                    });
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+}
+```
 # Guia Serenity 
 ```xml
 pom.xml
