@@ -1,12 +1,21 @@
-01/05/2024 10:34:33 -05:00 Seri Log is Working
-01/05/2024 10:34:33 -05:00 Se ha recibido una solicitud GET en el endpoint /api/example
-01/05/2024 10:34:33 -05:00 Número de tarjeta de crédito: { CreditCardNumber: "XXXX-XXXX-XXXX-3456" }
-01/05/2024 10:34:33 -05:00 Registro adicional con información enriquecida
-01/05/2024 10:34:37 -05:00 Seri Log is Working
-01/05/2024 10:34:37 -05:00 Se ha recibido una solicitud GET en el endpoint /api/example
-01/05/2024 10:34:37 -05:00 Número de tarjeta de crédito: { CreditCardNumber: "XXXX-XXXX-XXXX-3456" }
-01/05/2024 10:34:37 -05:00 Registro adicional con información enriquecida
-01/05/2024 11:42:48 -05:00 Seri Log is Working
-01/05/2024 11:42:48 -05:00 Se ha recibido una solicitud GET en el endpoint /api/example
-01/05/2024 11:42:48 -05:00 Número de tarjeta de crédito: { CreditCardNumber: "XXXX-XXXX-XXXX-3456" }
-01/05/2024 11:42:48 -05:00 Registro adicional con información enriquecida
+Unhandled exception. System.TypeLoadException: Method 'AsPages' in type 'Azure.Data.AppConfiguration.AsyncConditionalPageable' from assembly 'Azure.Data.AppConfiguration, Version=1.5.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8' does not have an implementation.
+   at Azure.Data.AppConfiguration.ConfigurationClient.GetConfigurationSettingsAsync(SettingSelector selector, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.<>c__DisplayClass33_1.<<LoadSelectedKeyValues>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.TracingUtils.CallWithRequestTracing(Boolean tracingEnabled, RequestType requestType, RequestTracingOptions requestTracingOptions, Func`1 clientCall)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.LoadSelectedKeyValues(ConfigurationClient client, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.<>c__DisplayClass32_0.<<InitializeAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.<>c__DisplayClass45_0.<<ExecuteWithFailOverPolicyAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.ExecuteWithFailOverPolicyAsync[T](IEnumerable`1 clients, Func`2 funcToExecute, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.ExecuteWithFailOverPolicyAsync(IEnumerable`1 clients, Func`2 funcToExecute, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.InitializeAsync(IEnumerable`1 clients, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.TryInitializeAsync(IEnumerable`1 clients, List`1 startupExceptions, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.LoadAsync(Boolean ignoreFailures, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Configuration.AzureAppConfiguration.AzureAppConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at Tuya.CobranzaDigital.ClienteCastigado.API.Program.Main(String[] args) in /home/vsts/work/1/s/api-cobranzadigital-clientecastigo/Dev_Resources/Tuya.CobranzaDigital.ClienteCastigado.API/Program.cs:line 16
