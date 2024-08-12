@@ -2,6 +2,69 @@
 
 ```c#
 
+using Microsoft.Extensions.Configuration;
+using Azure.Identity;
+using System;
+
+public interface IAppConfigurationService
+{
+    IConfiguration GetConfiguration();
+}
+
+public class AppConfigurationService : IAppConfigurationService
+{
+    private readonly IConfiguration configuration;
+
+    public AppConfigurationService(IConfiguration configuration)
+    {
+        this.configuration = configuration;
+    }
+
+    public IConfiguration GetConfiguration()
+    {
+        return configuration;
+    }
+}
+```
+```c#
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Azure.Identity;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Agregar y configurar Azure App Configuration
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    var connectionString = builder.Configuration.GetValue<string>("AppConfiguration:EndPoint");
+    options.Connect(new Uri(connectionString), new DefaultAzureCredential());
+    int durationCacheSeconds = builder.Configuration.GetValue<int>("AppConfiguration:DurationCacheSeconds");
+    options.ConfigureRefresh(refresh =>
+    {
+        refresh.Register("Settings:Sentinel", refreshAll: true)
+               .SetCacheExpiration(TimeSpan.FromSeconds(durationCacheSeconds));
+    });
+});
+
+// Registro del servicio de configuración
+builder.Services.AddSingleton<IAppConfigurationService, AppConfigurationService>();
+
+var app = builder.Build();
+
+// Configuración del middleware y los endpoints
+app.MapGet("/", (IAppConfigurationService configService) =>
+{
+    var config = configService.GetConfiguration();
+    return Results.Ok(config["SomeConfigKey"]);
+});
+
+app.Run();
+
+```
+
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
