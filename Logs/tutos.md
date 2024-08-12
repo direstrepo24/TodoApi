@@ -1,6 +1,74 @@
 #migracion 3.1 a 6
 
 ```c#
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Azure.Identity;
+using System;
+
+namespace Tuya.CobranzaDigital.ClienteCastigado.API
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (TypeLoadException ex)
+            {
+                Console.WriteLine($"TypeLoadException: {ex.Message}");
+                // Considerar la reconfiguración o reexaminar las dependencias si es recurrente
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unhandled exception: {ex.Message}");
+                // Log general para otras excepciones no manejadas
+            }
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        var settings = config.Build();
+                        int durationCacheSeconds = settings.GetValue<int>("AppConfiguration:DurationCacheSeconds");
+                        string connectionString = settings.GetValue<string>("AppConfiguration:EndPoint");
+
+                        try
+                        {
+                            config.AddAzureAppConfiguration(options =>
+                            {
+                                options.Connect(new Uri(connectionString), new DefaultAzureCredential());
+                                options.ConfigureRefresh(refresh =>
+                                {
+                                    refresh.Register(key: "Settings:Sentinel", refreshAll: true)
+                                    .SetCacheExpiration(TimeSpan.FromSeconds(durationCacheSeconds));
+                                });
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error configuring Azure App Configuration: {ex.Message}");
+                            // Manejar específicamente los errores de configuración
+                        }
+
+                        if (hostingContext.HostingEnvironment.IsDevelopment())
+                        {
+                            config.AddUserSecrets<Program>();
+                        }
+                    });
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+}
+
+```
 namespace Tuya.CobranzaDigital.ClienteCastigado.API
 {
     [ExcludeFromCodeCoverage]
